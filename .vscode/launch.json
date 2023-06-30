@@ -8,8 +8,11 @@
             "type": "chrome",
             "request": "launch",
             "name": "App",
-            "url": "file:///${workspaceFolder}/app/index.html",
-            "webRoot": "${workspaceFolder}"
+            "preLaunchTask": "webpack: dev server",
+            "url": "http://localhost:9000",
+            "webRoot": "${workspaceFolder}/app",
+            "sourceMaps": true,
+            "trace": true
         },
         {
             "name": "Api",

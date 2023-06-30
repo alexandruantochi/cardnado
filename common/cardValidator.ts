@@ -1,35 +1,35 @@
-function validateTesco(cardNumber: string): boolean {
-    return cardNumber.length === 18 && /^\d+$/.test(cardNumber);
-}
-
 type CardValidator = {
     validate: Function,
     condition: string
 }
 
-const validators = new Map<string, CardValidator>(
-    [
-        ['tesco', { validate: validateTesco, condition: 'Card nubmer must be 18 digits.'}],
-    ]);
-
-
-class Validator {
-    
-    canValidate : boolean
-    validate : Function;
-    condition : string;
-
-    constructor(store: string) {
-        const validator = validators.get(store);
-        this.canValidate = !!validator;
-        if(this.canValidate) {
-            this.validate = validator.validate;
-            this.condition = validator.condition;
-        } else {
-            this.validate = () => false;
-            this.condition = 'Store name not recognized';
-        }
-    }
+type ValidationOutput = {
+    valid: boolean,
+    msg: string
 }
 
-export default Validator;
+function validateTesco(cardNumber: string): boolean {
+    return cardNumber.length === 18 && /^\d+$/.test(cardNumber);
+}
+
+const validators = new Map<string, CardValidator>(
+    [
+        ['tesco', { validate: validateTesco, condition: 'Card number must be 18 digits.' }],
+    ]);
+
+function validateStore(store: string) {
+    return !!validators.get(store);
+}
+
+function validateStoreAndCard(store: string, cardNumber: string): ValidationOutput {
+    if (!validateStore(store)) {
+        return { valid: false, msg: `Store ${store} not recognized.` };
+    }
+    const storeCondition = validators.get(store);
+    if (!storeCondition.validate(cardNumber)) {
+        return { valid: false, msg: `Invalid card number. ${storeCondition.condition}` };
+    }
+    return { valid: true, msg: 'Card valid' };
+}
+
+export { validateStore, validateStoreAndCard };

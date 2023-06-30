@@ -48,6 +48,38 @@
 			"options": {
 				"cwd": "${workspaceFolder}/api"
 			}
+		},
+		{
+			"type": "npm",
+			"label": "webpack: dev server",
+			"script": "start",
+			"promptOnClose": true,
+			"isBackground": true,
+			"options": {
+				"cwd": "${workspaceFolder}/app"
+			},
+			"problemMatcher": {
+				"owner": "webpack",
+				"severity": "error",
+				"fileLocation": "absolute",
+				"pattern": [
+					{
+						"regexp": "ERROR in (.*)",
+						"file": 1
+					},
+					{
+						"regexp": "\\((\\d+),(\\d+)\\):(.*)",
+						"line": 1,
+						"column": 2,
+						"message": 3
+					}
+				],
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "Project is running at",
+					"endsPattern": "compiled successfully"
+				}
+			}
 		}
 	]
 }

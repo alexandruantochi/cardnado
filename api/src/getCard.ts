@@ -1,6 +1,6 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
 import { getContainer } from "./lib/containerUtils";
-import Validator from "../../common/cardValidator";
+import { validateStore } from "../../common/cardValidator";
 import config from "./lib/constants";
 
 type CardDetails = {
@@ -12,7 +12,7 @@ export async function getCard(request: HttpRequest, context: InvocationContext):
 
     const store = request.query.get('store')?.toLocaleLowerCase();
 
-    if (!validateRequest(store)) {
+    if (!validateStore(store)) {
         return {
             jsonBody: {
                 message: `Invalid store requested: ${store}`
@@ -43,7 +43,7 @@ export async function getCard(request: HttpRequest, context: InvocationContext):
             }
         }
     }
-    
+
     const querySpec = {
         query: "SELECT * FROM c WHERE c.store = @store ORDER BY c.id OFFSET @offset LIMIT 1",
         parameters: [
@@ -62,10 +62,6 @@ export async function getCard(request: HttpRequest, context: InvocationContext):
         status: 200
     }
 };
-
-function validateRequest(store: string): boolean {
-    return new Validator(store).canValidate;
-}
 
 app.http('getCard', {
     methods: ['GET'],
