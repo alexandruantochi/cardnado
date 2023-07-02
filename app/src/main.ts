@@ -1,3 +1,4 @@
-import { addCard } from "./add-card";
+import { addCard } from "./addCard";
+import {getCard } from "./getCard";
 
-export { addCard}
+export { addCard, getCard }

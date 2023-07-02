@@ -5,7 +5,8 @@
   "type": "commonjs",
   "private": true,
   "scripts": {
-    "build": "webpack --config webpack.config.js",
+    "dev": "webpack --config webpack.config.js --mode=development",
+    "production": "webpack --config webpack.config.js --mode=production",
     "start": "webpack-dev-server"
   },
   "author": "",
@@ -17,5 +18,8 @@
     "webpack": "^5.88.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
+  },
+  "dependencies": {
+    "@types/jsbarcode": "^3.11.1"
   }
 }

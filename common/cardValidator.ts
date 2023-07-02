@@ -14,7 +14,7 @@ function validateTesco(cardNumber: string): boolean {
 
 const validators = new Map<string, CardValidator>(
     [
-        ['tesco', { validate: validateTesco, condition: 'Card number must be 18 digits.' }],
+        ['tesco', { validate: validateTesco, condition: '18 digits required.' }],
     ]);
 
 function validateStore(store: string) {
@@ -29,7 +29,7 @@ function validateStoreAndCard(store: string, cardNumber: string): ValidationOutp
     if (!storeCondition.validate(cardNumber)) {
         return { valid: false, msg: `Invalid card number. ${storeCondition.condition}` };
     }
-    return { valid: true, msg: 'Card valid' };
+    return { valid: true, msg: 'Card valid.' };
 }
 
 export { validateStore, validateStoreAndCard };
