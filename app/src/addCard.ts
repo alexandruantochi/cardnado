@@ -3,6 +3,9 @@ import { setInfo } from './utils';
 import constants from './constants';
 import { AddCardRequest } from '../../common/models';
 
+const checkboxId = '#accept-checkbox';
+
+
 export async function addCard() {
     const store = $(constants.store).val() as string;
     const cardNumber = $(constants.cardNumber).val() as string;
@@ -12,13 +15,18 @@ export async function addCard() {
             store: store,
             cardNumber: cardNumber
         };
-        $.post(constants.addCardUrl, JSON.stringify(addCardRequest))
-            .done(function (data: any) {
-                setInfo(data.message, 'success');
-            })
-            .fail(function (data: any) {
-                setInfo(data.responseJSON.message, 'warning');
-            })
+        if ($(checkboxId).is(':checked')) {
+            $.post(constants.addCardUrl, JSON.stringify(addCardRequest))
+                .done(function (data: any) {
+                    setInfo(data.message, 'success');
+                })
+                .fail(function (data: any) {
+                    setInfo(data.responseJSON.message, 'warning');
+                })
+        } else {
+            setInfo('Please accept sharing this.', 'warning');
+        }
+
     }
     else {
         setInfo(validationResult.msg, 'warning');
