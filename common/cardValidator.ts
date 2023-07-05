@@ -8,14 +8,23 @@ type ValidationOutput = {
     msg: string
 }
 
+function allDigits(cardNumber: string): boolean {
+    return /^\d+$/.test(cardNumber);
+}
+
 function validateTesco(cardNumber: string): boolean {
     const mandatoryFirstDigits = '63400002';
-    return cardNumber.startsWith(mandatoryFirstDigits) && cardNumber.length === 18 && /^\d+$/.test(cardNumber);
+    return cardNumber.startsWith(mandatoryFirstDigits) && cardNumber.length === 18 && allDigits(cardNumber);
+}
+
+function validateSuperValu(cardNumber: string): boolean {
+    return cardNumber.length === 19 && allDigits(cardNumber);
 }
 
 const validators = new Map<string, CardValidator>(
     [
         ['tesco', { validate: validateTesco, condition: '18 digits required. Should start with 63400002' }],
+        ['supervalu', { validate: validateSuperValu, condition: '19 digits required.' }],
     ]);
 
 function validateStore(store: string) {
