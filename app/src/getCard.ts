@@ -3,13 +3,13 @@ import constants from "./constants";
 import { resetInfo, setInfo } from "./utils";
 
 declare var JsBarcode: any;
-
-$(document).ready(function() {
+$(function() {
     getCard();
     $('#store').on('change', function() {
         getCard();  
       });
 })
+
 
 function setBarcodeWidth() {
     $('#barcode').attr('width', '100%');
