@@ -5,8 +5,9 @@ on:
     branches:
       - main
     paths:
-      - ./app/**/*
-      - ./common/**/*
+      - app/**
+      - common/**
+      - .github\workflows\client.yml
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
