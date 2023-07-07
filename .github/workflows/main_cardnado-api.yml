@@ -28,7 +28,7 @@ jobs:
       - name: 'Resolve Project Dependencies Using Npm'
         shell: pwsh
         run: |
-          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/api'
           npm install
           npm run build --if-present
           npm run test --if-present
@@ -40,5 +40,5 @@ jobs:
         with:
           app-name: 'cardnado-api'
           slot-name: 'Production'
-          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/api
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4250F9E336AA459FB09E14DE69DA1073 }}
