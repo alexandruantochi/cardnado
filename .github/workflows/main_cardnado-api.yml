@@ -8,8 +8,9 @@ on:
     branches:
       - main
     paths:
-      - ./api/**/*
-      - ./common/**/*
+      - api/**
+      - common/**
+      - .github\workflows\api.yml
   workflow_dispatch:
 
 env:
