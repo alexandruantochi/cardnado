@@ -7,7 +7,7 @@ on:
     paths:
       - app/**
       - common/**
-      - .github\workflows\client.yml
+      - .github/workflows/client.yml
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:

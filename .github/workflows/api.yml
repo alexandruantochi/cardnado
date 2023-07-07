@@ -10,7 +10,7 @@ on:
     paths:
       - api/**
       - common/**
-      - .github\workflows\api.yml
+      - .github/workflows/api.yml
   workflow_dispatch:
 
 env:
