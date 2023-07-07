@@ -32,4 +32,12 @@ function getCard() {
     generateBarcode(store);
 }
 
-export { getCard };
+$(function () {
+    getCard();
+    $('#store').on('change', function () {
+        getCard();
+    });
+    $('#get-card').on('click', () => { getCard(); });
+});
+
+

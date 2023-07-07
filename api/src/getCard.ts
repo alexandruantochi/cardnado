@@ -1,5 +1,5 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
-import { getContainer } from "./lib/containerUtils";
+import { getContainer } from "./lib/utils";
 import { validateStore } from "../../common/cardValidator";
 import config from "./lib/constants";
 

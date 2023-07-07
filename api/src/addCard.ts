@@ -1,16 +1,16 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
 import { validateStoreAndCard } from "../../common/cardValidator";
-import { getContainer } from "./lib/containerUtils";
-import { AddCardRequest, AddCardReply } from '../../common/models';
+import { generateResponse, getContainer } from "./lib/utils";
+import { CardDetails, ApiReply } from '../../common/models';
 import config from './lib/constants';
 
 /// app
 export async function addCard(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
 
-    let addCardRequest: AddCardRequest;
+    let addCardRequest: CardDetails;
 
     try {
-        addCardRequest = await request.json() as AddCardRequest;
+        addCardRequest = await request.json() as CardDetails;
     } catch (err) {
         return generateResponse(400, 'Invalid request.', context);
     }
@@ -25,7 +25,7 @@ export async function addCard(request: HttpRequest, context: InvocationContext):
 
 };
 
-async function addCardIfDoesNotExist(request: AddCardRequest, context: InvocationContext): Promise<AddCardReply> {
+async function addCardIfDoesNotExist(request: CardDetails, context: InvocationContext): Promise<ApiReply> {
     const cardNumberContainer = getContainer(config.DATABASE, config.CARD_NUMBER_CONTAINER)
     const cardExists = await cardNumberContainer.item(request.cardNumber, request.store).read();
 
@@ -35,7 +35,8 @@ async function addCardIfDoesNotExist(request: AddCardRequest, context: Invocatio
         const res = await cardNumberContainer.items.create({
             id: request.cardNumber,
             store: request.store,
-            flagged: 0
+            flagged: 0,
+            verified: false
         });
 
         if (res.statusCode === 201) {
@@ -46,15 +47,7 @@ async function addCardIfDoesNotExist(request: AddCardRequest, context: Invocatio
     }
 }
 
-function generateResponse(statusCode: number, message: string, context: InvocationContext): AddCardReply {
-    context.log(message);
-    return {
-        status: statusCode,
-        jsonBody: {
-            message: message
-        }
-    };
-}
+
 
 app.http('addCard', {
     methods: ['POST'],

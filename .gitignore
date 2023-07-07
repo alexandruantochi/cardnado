@@ -131,3 +131,6 @@ api/dist
 
 # html app
 /app/src/dist/*.js
+
+# typescript
+*.js.map

@@ -1,7 +1,7 @@
 import { validateStoreAndCard } from '../../common/cardValidator';
 import { setInfo } from './utils';
 import constants from './constants';
-import { AddCardRequest } from '../../common/models';
+import { CardDetails } from '../../common/models';
 
 const checkboxId = '#accept-checkbox';
 const checkboxLabelId = '#checkbox-label';
@@ -16,7 +16,7 @@ export async function addCard() {
     checkboxLabel.removeClass('text-danger');
 
     if (validationResult.valid) {
-        const addCardRequest: AddCardRequest = {
+        const addCardRequest: CardDetails = {
             store: store,
             cardNumber: cardNumber
         };

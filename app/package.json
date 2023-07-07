@@ -2,12 +2,12 @@
   "name": "app",
   "version": "1.0.0",
   "description": "",
-  "type": "commonjs",
+  "type": "module",
   "private": true,
   "scripts": {
-    "dev": "webpack --config webpack.config.js --mode=development",
-    "production": "webpack --config webpack.config.js --mode=production",
-    "start": "webpack-dev-server"
+    "dev": "webpack --config webpack.dev.cjs --mode=development",
+    "production": "webpack --config webpack.production.cjs --mode=production",
+    "start": "webpack-dev-server --config webpack.dev.cjs"
   },
   "author": "",
   "license": "ISC",

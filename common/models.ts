@@ -1,13 +1,13 @@
-type AddCardRequest = {
+type CardDetails = {
     store: string,
     cardNumber: string
 }
 
-type AddCardReply = {
+type ApiReply = {
     jsonBody: {
         message: string
     },
     status: number
 }
 
-export { AddCardReply, AddCardRequest };
+export { ApiReply, CardDetails };

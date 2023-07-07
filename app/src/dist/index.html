@@ -9,10 +9,11 @@
     crossorigin="anonymous"></script>
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"
     integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
-  <script src="./main.js"></script>
+  <script src="./index.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Cardnado</title>
+  <link rel="shortcut icon" type="image/jpg" href="./assets/thumb.png"/>
 </head>
 
 <body data-bs-theme="dark">
@@ -35,8 +36,6 @@
       </div>
     </div>
   </nav>
-
-
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-1 col-md-2 col-lg-3 col-xl-4"></div>
@@ -70,7 +69,7 @@
         <button class="btn btn-outline-primary" type="button" onclick="cardnado.getCard()" id="get-card">&#9850;
           Refresh</button>
         <div style="width: 5px; display: inline-block;"></div>
-        <button class="btn btn-outline-secondary disabled" type="button" onclick="cardnado.reportCard()" id="report-card">&#9888;
+        <button class="btn btn-outline-secondary disabled" type="button" id="report-card">&#9888;
           Report</button>
         <br>
         <br>
@@ -80,14 +79,5 @@
       <div class="col-sm-1 col-md-2 col-lg-3 col-xl-4"></div>
     </div>
   </div>
-<script>
-  $(function() {
-    cardnado.getCard();
-    $('#store').on('change', function() {
-      cardnado.getCard();  
-      });
-})
-</script>
-
 </body>
 </html>
