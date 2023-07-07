@@ -5,9 +5,9 @@ import { CardDetails } from '../../common/models';
 
 const checkboxId = '#accept-checkbox';
 const checkboxLabelId = '#checkbox-label';
-const storeSelector = $('#store-selector');
-const cardNumberInput = $('#card-number');
-
+var storeSelector;
+var cardNumberInput;
+var addCardButton;
 
 export async function addCard() {
     const store = storeSelector.val() as string;
@@ -41,3 +41,12 @@ export async function addCard() {
     }
 }
 
+$(function () {
+
+    storeSelector = $('#store-selector');
+    cardNumberInput = $('#card-number');
+    addCardButton = $('#add-card');
+    addCardButton.on('click', () => {
+        addCard();
+    })
+})
