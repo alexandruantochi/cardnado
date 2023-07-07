@@ -1,14 +1,12 @@
-const baseApiUrl = 'https://cardnado-api.azurewebsites.net';
+const baseApiUrl = 'https://cardnado-api.azurewebsites.net/api/';
 
 
 
 const constants = {
-    addCardUrl : baseApiUrl + '/api/addcard',
-    getCardUrl : baseApiUrl + '/api/getcard',
-    store: '#store',
-    cardNumber: '#card-number',
-    alert: '#alert',
-    
+    addCardUrl : baseApiUrl + 'addcard',
+    getCardUrl : baseApiUrl + 'getcard',
+    reportCardUrl : baseApiUrl + 'reportCard',
+    alert: '#alert'
 }
 
 export default constants;

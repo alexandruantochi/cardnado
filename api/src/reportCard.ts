@@ -13,7 +13,7 @@ export async function reportCard(request: HttpRequest, context: InvocationContex
     try {
         cardRequest = await request.json() as CardDetails;
     } catch (err) {
-        return generateResponse(400, 'Invalid request.', context);
+        return generateResponse(400, `Invalid request ${cardRequest}`, context);
     }
 
     const validationCheck = validateStoreAndCard(cardRequest.store, cardRequest.cardNumber);
@@ -34,7 +34,7 @@ export async function reportCard(request: HttpRequest, context: InvocationContex
 }
 
 app.http('reportCard', {
-    methods: ['PATCH'],
+    methods: ['POST'],
     authLevel: 'anonymous',
     handler: reportCard
 });
