@@ -10,4 +10,4 @@ type ApiReply = {
     status: number
 }
 
-export { ApiReply, CardDetails };
+export { CardDetails, ApiReply };
