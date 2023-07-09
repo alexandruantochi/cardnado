@@ -15,7 +15,7 @@ class Index {
     private api: CardnadoApi = new CardnadoApi();
 
     public async init() {
-
+        setInfo('Please wait...', 'default');
         const allCards = this.api.getCards();
 
         this.reportCardButton = $('#report-card');
