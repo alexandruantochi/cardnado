@@ -1,5 +1,5 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
-import { validateStoreAndCard } from "../../common/cardValidator";
+import { availableStore, validateStoreAndCard } from "../../common/cardValidator";
 import { generateResponse, getContainer } from "./lib/utils";
 import { CardDetails, ApiReply } from '../../common/models';
 import config from './lib/constants';
@@ -15,7 +15,7 @@ export async function addCard(request: HttpRequest, context: InvocationContext):
         return generateResponse(400, 'Invalid request.', context);
     }
 
-    const validationCheck = validateStoreAndCard(addCardRequest.store, addCardRequest.cardNumber);
+    const validationCheck = validateStoreAndCard(addCardRequest.store as availableStore, addCardRequest.cardNumber);
 
     if (!validationCheck.valid) {
         return generateResponse(400, validationCheck.msg, context);

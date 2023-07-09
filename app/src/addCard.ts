@@ -1,6 +1,6 @@
-import { validateStoreAndCard } from '../../common/cardValidator';
-import { setInfo } from './utils';
-import constants from './constants';
+import { validateStoreAndCard, availableStore } from '../../common/cardValidator';
+import { setInfo } from './lib/utils';
+import constants from './lib/constants';
 import { CardDetails } from '../../common/models';
 
 const checkboxId = '#accept-checkbox';
@@ -10,7 +10,7 @@ var cardNumberInput;
 var addCardButton;
 
 export async function addCard() {
-    const store = storeSelector.val() as string;
+    const store = storeSelector.val() as availableStore;
     const cardNumber = cardNumberInput.val() as string;
     const validationResult = validateStoreAndCard(store, cardNumber);
     const checkbox = $(checkboxId);
@@ -42,7 +42,6 @@ export async function addCard() {
 }
 
 $(function () {
-
     storeSelector = $('#store-selector');
     cardNumberInput = $('#card-number');
     addCardButton = $('#add-card');

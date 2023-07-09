@@ -1,73 +1,103 @@
-import { validateStore } from "../../common/cardValidator";
+import { availableStore, getAvailableStores } from "../../common/cardValidator";
 import { CardDetails } from "../../common/models";
-import constants from "./constants";
-import { resetInfo, setInfo } from "./utils";
+import { CardnadoApi } from "./lib/repository";
+import { setInfo } from "./lib/utils";
 
-declare var JsBarcode: any;
-var currentCardNumber = '';
-var reportCardButton;
-var refreshButton;
-var storeSelector;
+declare var JsBarcode;
 
-function getStoreAndCard(): CardDetails {
-    return {
-        cardNumber: currentCardNumber,
-        store: storeSelector.val() as string
-    };
-}
+class Index {
 
-function setBarcodeWidth() {
-    $('#barcode').attr('width', '100%');
-}
+    private cardDataPosition = {};
+    private cardData = new Map<availableStore, string[]>();
+    private reportCardButton;
+    private refreshButton;
+    private storeSelector;
+    private api: CardnadoApi = new CardnadoApi();
 
-function generateBarcode(store: string) {
-    $.get(constants.getCardUrl, { "store": store })
-        .done(function (data) {
-            JsBarcode("#barcode", data.id);
-            currentCardNumber = data.id;
-            setBarcodeWidth();
-            resetInfo();
+    public async init() {
+
+        const allCards = this.api.getCards();
+
+        this.reportCardButton = $('#report-card');
+        this.refreshButton = $('#refresh-card');
+        this.storeSelector = $('#store-selector');
+
+
+        getAvailableStores().forEach(x => {
+            this.cardDataPosition[x] = 0;
+            this.cardData.set(x, []);
+        });
+
+        this.storeSelector.on('change', () => this.generateBarcode());
+        this.refreshButton.on('click', () => this.nextCard());
+        this.reportCardButton.on('click', () => this.reportCard());
+
+        (await allCards).forEach(x => {
+            this.cardData.get(x.store).push(x.cardNumber);
         })
-        .fail(function (data) {
-            setInfo(data.responseJSON.message, 'warning');
 
-        }).always(() => { refreshButton.removeClass('disabled'); });
-}
-
-
-function getCard() {
-    setInfo('Please wait...', 'default');
-    refreshButton.addClass('disabled');
-    const store = storeSelector.val() as string;
-    if (!validateStore(store)) {
-        setInfo('Invalid store selected', 'warning');
+        this.generateBarcode();
     }
-    generateBarcode(store);
-}
 
-function reportCard() {
-    reportCardButton.addClass('disabled');
-    setInfo('Please wait...', 'default');
-    const cardDetails = getStoreAndCard();
-    $.post(constants.reportCardUrl, JSON.stringify(cardDetails))
-        .done(function () {
-            getCard();
-        })
-        .fail(function (data) {
-            setInfo(data.responseJSON.message, 'warning');
-        }).always(() => { reportCardButton.removeClass('disabled'); });
+    private getCurrentStore(): availableStore {
+        return this.storeSelector.val() as availableStore;
+    }
+
+    private getCurrentCardIndex(): number {
+        return this.cardDataPosition[this.getCurrentStore()];
+    }
+
+    private getCurrentCard(): string {
+        return this.cardData.get(this.getCurrentStore())[this.getCurrentCardIndex()];
+    }
+
+    private async reportCard() {
+        setInfo('Please wait...', 'default');
+        this.disableButtons();
+
+        const cardDetails: CardDetails = {
+            cardNumber: this.getCurrentCard(),
+            store: this.getCurrentStore()
+        }
+
+        try {
+            await this.api.reportCard(cardDetails);
+            setInfo(`Reported, new card generated.`, 'success');
+            this.nextCard();
+        } catch (Err) {
+            console.log(Err.message);
+        } finally {
+            this.enableButtons();
+        }
+    }
+
+    private generateBarcode(): void {
+        JsBarcode("#barcode", this.getCurrentCard());
+        $('#barcode').attr('width', '100%');
+    }
+
+    private nextCard() {
+        this.cardDataPosition[this.getCurrentStore()]++;
+        const cardListLength = this.cardData.get(this.getCurrentStore()).length;
+        if (this.getCurrentCardIndex() >= cardListLength) {
+            // TODO: request next page
+            setInfo('You have reached the end of the list. Went back to the first card.', 'warning');
+            this.cardDataPosition[this.getCurrentStore()] = 0;
+        }
+        this.generateBarcode();
+    }
+
+    private disableButtons() {
+        [this.reportCardButton, this.refreshButton].forEach(x => x.addClass('disabled'));
+    }
+
+    private enableButtons() {
+        [this.reportCardButton, this.refreshButton].forEach(x => x.removeClass('disabled'));
+    }
 }
 
 $(function () {
-    reportCardButton = $('#report-card');
-    refreshButton = $('#refresh-card');
-    storeSelector = $('#store-selector');
-    getCard();
-    storeSelector.on('change', function () {
-        getCard();
-    });
-    refreshButton.on('click', () => { getCard(); });
-    reportCardButton.on('click', () => { reportCard(); });
+    new Index().init();
 });
 
 

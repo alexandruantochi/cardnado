@@ -8,6 +8,8 @@ type ValidationOutput = {
     msg: string
 }
 
+type availableStore = 'tesco' | 'supervalu';
+
 function allDigits(cardNumber: string): boolean {
     return /^\d+$/.test(cardNumber);
 }
@@ -21,17 +23,21 @@ function validateSuperValu(cardNumber: string): boolean {
     return cardNumber.length === 19 && allDigits(cardNumber);
 }
 
-const validators = new Map<string, CardValidator>(
+const validators = new Map<availableStore, CardValidator>(
     [
         ['tesco', { validate: validateTesco, condition: '18 digits required. Should start with 63400002' }],
         ['supervalu', { validate: validateSuperValu, condition: '19 digits required.' }],
     ]);
 
-function validateStore(store: string) {
+function getAvailableStores() : availableStore[] {
+    return Array.from(validators.keys());
+}
+
+function validateStore(store: availableStore) : boolean {
     return !!validators.get(store);
 }
 
-function validateStoreAndCard(store: string, cardNumber: string): ValidationOutput {
+function validateStoreAndCard(store: availableStore, cardNumber: string): ValidationOutput {
     if (!validateStore(store)) {
         return { valid: false, msg: `Store ${store} not recognized.` };
     }
@@ -42,4 +48,4 @@ function validateStoreAndCard(store: string, cardNumber: string): ValidationOutp
     return { valid: true, msg: 'Card valid.' };
 }
 
-export { validateStore, validateStoreAndCard };
+export { validateStore, validateStoreAndCard, getAvailableStores, availableStore };

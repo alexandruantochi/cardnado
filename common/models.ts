@@ -1,5 +1,7 @@
+import { availableStore } from "./cardValidator"
+
 type CardDetails = {
-    store: string,
+    store: availableStore,
     cardNumber: string
 }
 

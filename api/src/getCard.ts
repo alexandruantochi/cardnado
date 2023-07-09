@@ -1,6 +1,6 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
 import { getContainer } from "./lib/utils";
-import { validateStore } from "../../common/cardValidator";
+import { availableStore, validateStore } from "../../common/cardValidator";
 import config from "./lib/constants";
 
 type CardDetails = {
@@ -10,7 +10,7 @@ type CardDetails = {
 
 export async function getCard(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
 
-    const store = request.query.get('store')?.toLocaleLowerCase();
+    const store = request.query.get('store')?.toLocaleLowerCase() as availableStore;
 
     if (!validateStore(store)) {
         return {
