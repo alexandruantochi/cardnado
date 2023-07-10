@@ -22,8 +22,9 @@ function resetInfo() {
 }
 
 function shuffle(cardNumbers: string[]): void {
-    let currentIndex = cardNumbers.length - 1;
+    let currentIndex = cardNumbers.length;
     while (currentIndex !== 0) {
+        currentIndex--;
         let randomIndex = getRandomInt(currentIndex);
         if (randomIndex === currentIndex) {
             continue;
@@ -31,7 +32,7 @@ function shuffle(cardNumbers: string[]): void {
         let aux = cardNumbers[currentIndex];
         cardNumbers[currentIndex] = cardNumbers[randomIndex];
         cardNumbers[randomIndex] = aux;
-        currentIndex--;
+        
     }
 }
 

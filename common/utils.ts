@@ -1,5 +1,5 @@
 function getRandomInt(maxInclusive: number): number {
-    return Math.ceil(Math.random() * maxInclusive);
+    return Math.floor(Math.random() * (maxInclusive + 1));
 }
 
 export { getRandomInt }

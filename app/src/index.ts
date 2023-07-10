@@ -1,7 +1,7 @@
 import { availableStore, getAvailableStores } from "../../common/cardValidator";
 import { CardDetails } from "../../common/models";
 import { CardnadoApi } from "./lib/repository";
-import { resetInfo, setInfo } from "./lib/utils";
+import { resetInfo, setInfo, shuffle } from "./lib/utils";
 
 declare var JsBarcode;
 
@@ -34,7 +34,9 @@ class Index {
 
         (await allCards).forEach(x => {
             this.cardData.get(x.store).push(x.cardNumber);
-        })
+        });
+
+        this.cardData.forEach(cardNumbers => shuffle(cardNumbers));
 
         resetInfo();
         this.generateBarcode();
