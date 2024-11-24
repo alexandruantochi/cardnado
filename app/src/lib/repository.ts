@@ -9,12 +9,21 @@ class CardnadoApi {
         ['reportCard', this.reportCard],
         ['addCard', () => { }]
     ]);
+    
 
     public async getCards(): Promise<CardDetails[]> {
-        let response = await fetch(`${constants.getCardsUrl}`, {
-            method: 'GET',
-        });
-        return response.json();
+        try {
+            const response = await fetch(`${constants.getCardsUrl}`, {
+                method: 'GET',
+            });
+            if (!response.ok) {
+                console.error(`Failed to retrieve cards, status : ${response.status}.`);
+            }
+            return response.json();
+        } catch (error) {
+            console.error('Failed to retrieve cards', error);
+            return Promise.resolve(null);   
+        }
     }
 
     public async reportCard(cardDetails: CardDetails): Promise<boolean> {
