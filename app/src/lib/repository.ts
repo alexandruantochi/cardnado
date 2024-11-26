@@ -9,7 +9,7 @@ class CardnadoApi {
         ['reportCard', this.reportCard],
         ['addCard', () => { }]
     ]);
-    
+
 
     public async getCards(): Promise<CardDetails[]> {
         try {
@@ -22,7 +22,7 @@ class CardnadoApi {
             return response.json();
         } catch (error) {
             console.error('Failed to retrieve cards', error);
-            return Promise.resolve(null);   
+            return Promise.resolve(null);
         }
     }
 
@@ -37,7 +37,7 @@ class CardnadoApi {
         return response.ok;
     }
 
-    public async addCard(cardDetails: CardDetails) : Promise<boolean> {
+    public async addCard(cardDetails: CardDetails): Promise<boolean> {
         const response = await fetch(constants.reportCardUrl, {
             method: 'POST',
             headers: {
@@ -46,6 +46,19 @@ class CardnadoApi {
             body: JSON.stringify(cardDetails)
         });
         return response.ok;
+    }
+
+    public async getLastUpdate(): Promise<Date> {
+        try {
+            const response = await fetch(constants.lastUpdateUrl);
+            const data = await response.json();
+            const isoDateString = data.date;
+            const date = new Date(isoDateString);
+            return date;
+        } catch (error) {
+            console.error('Error fetching last update from API:', error);
+            return null;
+        }
     }
 }
 
