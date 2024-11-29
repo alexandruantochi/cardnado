@@ -22,7 +22,7 @@ class CacheService {
         }
     
         console.log(`Retrieved data from ${getLocation}`)
-        return JSON.parse(storedCards);
+        return JSON.parse(localStorage.getItem(STORAGE_CARDS));
     }
     
     private saveCardsToLocalStorage(cards: CardDetails[]) {
