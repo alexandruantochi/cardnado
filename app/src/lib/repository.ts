@@ -10,11 +10,20 @@ class CardnadoApi {
         ['addCard', () => { }]
     ]);
 
+
     public async getCards(): Promise<CardDetails[]> {
-        let response = await fetch(`${constants.getCardsUrl}`, {
-            method: 'GET',
-        });
-        return response.json();
+        try {
+            const response = await fetch(`${constants.getCardsUrl}`, {
+                method: 'GET',
+            });
+            if (!response.ok) {
+                console.error(`Failed to retrieve cards, status : ${response.status}.`);
+            }
+            return response.json();
+        } catch (error) {
+            console.error('Failed to retrieve cards', error);
+            return Promise.resolve(null);
+        }
     }
 
     public async reportCard(cardDetails: CardDetails): Promise<boolean> {
@@ -28,7 +37,7 @@ class CardnadoApi {
         return response.ok;
     }
 
-    public async addCard(cardDetails: CardDetails) : Promise<boolean> {
+    public async addCard(cardDetails: CardDetails): Promise<boolean> {
         const response = await fetch(constants.reportCardUrl, {
             method: 'POST',
             headers: {
@@ -37,6 +46,19 @@ class CardnadoApi {
             body: JSON.stringify(cardDetails)
         });
         return response.ok;
+    }
+
+    public async getLastUpdate(): Promise<Date> {
+        try {
+            const response = await fetch(constants.lastUpdateUrl);
+            const data = await response.json();
+            const isoDateString = data.date;
+            const date = new Date(isoDateString);
+            return date;
+        } catch (error) {
+            console.error('Error fetching last update from API:', error);
+            return null;
+        }
     }
 }
 

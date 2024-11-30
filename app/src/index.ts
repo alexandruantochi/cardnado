@@ -1,5 +1,6 @@
 import { availableStore, getAvailableStores } from "../../common/cardValidator";
 import { CardDetails } from "../../common/models";
+import { CacheService } from "./lib/cacheService";
 import { CardnadoApi } from "./lib/repository";
 import { resetInfo, setInfo, shuffle } from "./lib/utils";
 
@@ -12,11 +13,12 @@ class Index {
     private reportCardButton;
     private refreshButton;
     private storeSelector;
+    private cache: CacheService = new CacheService();
     private api: CardnadoApi = new CardnadoApi();
 
     public async init() {
         setInfo('Please wait...', 'default');
-        const allCards = this.api.getCards();
+        const allCards = this.cache.getCards();
 
         this.reportCardButton = $('#report-card');
         this.refreshButton = $('#refresh-card');

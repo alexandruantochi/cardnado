@@ -5,6 +5,7 @@ const constants = {
     getCardUrl : baseApiUrl + 'getcard',
     getCardsUrl : baseApiUrl + 'getcards',
     reportCardUrl : baseApiUrl + 'reportCard',
+    lastUpdateUrl : baseApiUrl + 'lastUpdate',
     infoSection: '#info-section'
 }
 
