@@ -5,6 +5,7 @@ module.exports = {
   entry: {
     index: './src/index.ts',
     addCard: './src/addCard.ts',
+    nav: './src/lib/nav.ts'
   },
   devtool: 'source-map',
   module: {
