@@ -5,45 +5,47 @@ import { CdnManagementClient } from "@azure/arm-cdn";
 import { getContainer } from "./lib/utils";
 import { CardDetails } from "../../common/models";
 import config from "./lib/constants";
+import { FeedResponse } from "@azure/cosmos";
 
 export async function saveCardsToBlob(myTimer: any, context: InvocationContext): Promise<void> {
-    try {
-        // Get cards from Cosmos DB
-        const container = getContainer(config.database.name, config.database.cardNumberContainer);
-        const query = 'SELECT c.id AS cardNumber, c.store FROM c';
-        const { resources: cards } = await container.items.query(query).fetchAll();
+    const credentials = new DefaultAzureCredential();
+    const query = 'SELECT c.id AS cardNumber, c.store FROM c';
 
-        // Connect to blob storage using managed identity
+    try {
+        const container = getContainer(config.database.name, config.database.cardNumberContainer);
+        const cardsPromise: Promise<FeedResponse<CardDetails>> = container.items.query(query).fetchAll();
+
         const blobServiceClient = new BlobServiceClient(
             `https://${config.blob.storageAccountName}.blob.core.windows.net`,
-            new DefaultAzureCredential()
+            credentials
         );
         const containerClient = blobServiceClient.getContainerClient(config.blob.container);
-        await containerClient.createIfNotExists();
-
-        // Save cards to blob
         const blockBlobClient = containerClient.getBlockBlobClient(config.blob.fileName);
-        await blockBlobClient.upload(JSON.stringify(cards), JSON.stringify(cards).length);
 
-        // Purge CDN cache
-        const cdnClient = new CdnManagementClient(new DefaultAzureCredential(), process.env.SUBSCRIPTION_ID);
-        await cdnClient.endpoints.beginPurgeContentAndWait(
+        const cards: CardDetails[] = (await cardsPromise).resources;
+        const cardsJson = JSON.stringify(cards);
+
+        const uploadResponse = blockBlobClient.upload(cardsJson, cardsJson.length);
+
+        const cdnClient = new CdnManagementClient(credentials, process.env.SUBSCRIPTION_ID);
+        await uploadResponse;
+        await cdnClient.afdEndpoints.beginPurgeContentAndWait(
             process.env.RESOURCE_GROUP,
             config.cdn.profile,
             config.cdn.endpoint,
             {
-                contentPaths: [`/${config.blob.container}/${config.blob.fileName}`]
+                contentPaths: [`/*`]
             }
         );
- 
-        context.log(`Successfully saved ${cards.length} cards to blob storage and purged CDN cache`);
+        context.log(`Succesfully uploaded ${cards.length} cards and purged CDN.`);
     } catch (error) {
-        context.error('Error saving cards to blob storage:', error);
+        context.error(error);
     }
 }
 
-// Run every day at midnight
+
 app.timer('saveCardsToBlob', {
-    schedule: '0 0 * * *',
-    handler: saveCardsToBlob
+    schedule: '0 0 0 * * *',
+    handler: saveCardsToBlob,
+    runOnStartup: true
 }); 
