@@ -5,14 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "chrome",
+            "type": "firefox",
             "request": "launch",
             "name": "App",
             "preLaunchTask": "webpack: dev server",
             "url": "http://localhost:9000",
-            "webRoot": "${workspaceFolder}/app",
-            "sourceMaps": true,
-            "trace": true
+            "webRoot": "${workspaceFolder}/app"
         },
         {
             "name": "Api",
