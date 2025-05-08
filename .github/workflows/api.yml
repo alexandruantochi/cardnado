@@ -11,6 +11,14 @@ on:
       - api/**
       - common/**
       - .github/workflows/api.yml
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+    paths:
+      - api/**
+      - common/**
+      - .github/workflows/api.yml
   workflow_dispatch:
 
 env:
@@ -18,7 +26,37 @@ env:
   NODE_VERSION: '22.x'
 
 jobs:
-  build-and-deploy:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v3
+
+      - name: Setup Node ${{ env.NODE_VERSION }} Environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: './api/package-lock.json'
+
+      - name: 'Install Dependencies'
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          npm ci
+          popd
+
+      - name: 'Build and Test'
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          npm run build
+          npm run test --if-present
+          popd
+
+  deploy:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: windows-latest
     steps:
       - name: 'Checkout GitHub Action'
@@ -47,7 +85,6 @@ jobs:
           popd
 
       - name: 'Deploy to Azure Functions'
-        if: success()
         uses: Azure/functions-action@v1
         id: fa
         with:
