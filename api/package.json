@@ -15,7 +15,10 @@
   },
   "dependencies": {
     "@azure/cosmos": "^4.0.0",
-    "@azure/functions": "^4.0.0"
+    "@azure/functions": "^4.0.0",
+    "@azure/storage-blob": "^12.17.0",
+    "@azure/identity": "^4.0.0",
+    "@azure/arm-cdn": "^7.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.x",
