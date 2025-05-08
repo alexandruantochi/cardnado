@@ -19,6 +19,9 @@ export function initNav() {
                             <li class="nav-item">
                                 <a class="nav-link btn btn-success text-white" id="nav-support" href="support.html">Support & Info</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-info text-white" id="nav-news" href="news.html">News</a>
+                            </li>
                         </ul>
                     </div>
                 </div>

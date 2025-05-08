@@ -21,7 +21,7 @@ export async function getCard(request: HttpRequest, context: InvocationContext):
         }
     }
 
-    const container = getContainer(config.DATABASE, config.CARD_NUMBER_CONTAINER);
+    const container = getContainer(config.database.name, config.database.cardNumberContainer);
     const countQuery = {
         query: "SELECT VALUE COUNT(1) FROM c WHERE c.store = @store",
         parameters: [

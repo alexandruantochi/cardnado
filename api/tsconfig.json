@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "NodeNext",
     "target": "es6",
     "outDir": "dist",
     "sourceMap": true,
-    "strict": false
+    "strict": false,
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "skipLibCheck": true
   }
 }

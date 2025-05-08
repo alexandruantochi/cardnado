@@ -2,7 +2,9 @@ import { availableStore } from "./cardValidator"
 
 type CardDetails = {
     store: availableStore,
-    cardNumber: string
+    cardNumber: string,
+    flagged?: number,
+    verified?: boolean
 }
 
 type ApiReply = {

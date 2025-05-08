@@ -22,7 +22,7 @@ export async function reportCard(request: HttpRequest, context: InvocationContex
         return generateResponse(400, validationCheck.msg, context);
     }
 
-    const cardNumberContainer = getContainer(config.DATABASE, config.CARD_NUMBER_CONTAINER)
+    const cardNumberContainer = getContainer(config.database.name, config.database.cardNumberContainer)
     const cardItem = await cardNumberContainer.item(cardRequest.cardNumber, cardRequest.store).read();
 
     if (cardItem.statusCode === 200) {

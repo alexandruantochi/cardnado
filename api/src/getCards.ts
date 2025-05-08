@@ -7,7 +7,7 @@ import config from "./lib/constants";
 var cardsCache: CardDetails[] = [];
 
 export async function getCards(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-    const container = getContainer(config.DATABASE, config.CARD_NUMBER_CONTAINER);
+    const container = getContainer(config.database.name, config.database.cardNumberContainer);
     const query = 'SELECT c.id AS cardNumber, c.store FROM c';
     if (cardsCache.length === 0) {
         try {

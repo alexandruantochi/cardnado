@@ -26,7 +26,7 @@ export async function addCard(request: HttpRequest, context: InvocationContext):
 };
 
 async function addCardIfDoesNotExist(request: CardDetails, context: InvocationContext): Promise<ApiReply> {
-    const cardNumberContainer = getContainer(config.DATABASE, config.CARD_NUMBER_CONTAINER)
+    const cardNumberContainer = getContainer(config.database.name, config.database.cardNumberContainer)
     const cardExists = await cardNumberContainer.item(request.cardNumber, request.store).read();
 
     if (cardExists.statusCode === 200) {
@@ -46,8 +46,6 @@ async function addCardIfDoesNotExist(request: CardDetails, context: InvocationCo
         }
     }
 }
-
-
 
 app.http('addCard', {
     methods: ['POST'],
