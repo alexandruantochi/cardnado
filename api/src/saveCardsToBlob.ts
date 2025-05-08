@@ -29,7 +29,7 @@ export async function saveCardsToBlob(myTimer: any, context: InvocationContext):
 
         const cdnClient = new CdnManagementClient(credentials, process.env.SUBSCRIPTION_ID);
         await uploadResponse;
-        await cdnClient.afdEndpoints.beginPurgeContentAndWait(
+        cdnClient.afdEndpoints.beginPurgeContent(
             process.env.RESOURCE_GROUP,
             config.cdn.profile,
             config.cdn.endpoint,
@@ -37,7 +37,10 @@ export async function saveCardsToBlob(myTimer: any, context: InvocationContext):
                 contentPaths: [`/*`]
             }
         );
-        context.log(`Succesfully uploaded ${cards.length} cards and purged CDN.`);
+
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+
+        context.log(`Succesfully uploaded ${cards.length} cards and initiated CDN purge.`);
     } catch (error) {
         context.error(error);
     }
