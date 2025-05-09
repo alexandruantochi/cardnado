@@ -8,7 +8,7 @@ export default defineConfig({
     outDir: path.resolve(__dirname, 'dist'),
     emptyOutDir: true,
     assetsDir: "assets",
-    sourcemap: true,
+    sourcemap: process.env.NODE_ENV === 'production' ? false : true,
     rollupOptions: {
       input: {
         index: path.resolve(__dirname, 'src/index.html'),
