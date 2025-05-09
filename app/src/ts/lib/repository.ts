@@ -1,4 +1,4 @@
-import { CardDetails } from "../../../common/models";
+import { CardDetails } from "../../../../common/models";
 import constants from "./constants";
 import { requestApiOption } from './utils';
 
@@ -46,19 +46,6 @@ class CardnadoApi {
             body: JSON.stringify(cardDetails)
         });
         return response.ok;
-    }
-
-    public async getLastUpdate(): Promise<Date> {
-        try {
-            const response = await fetch(constants.lastUpdateUrl);
-            const data = await response.json();
-            const isoDateString = data.date;
-            const date = new Date(isoDateString);
-            return date;
-        } catch (error) {
-            console.error('Error fetching last update from API:', error);
-            return null;
-        }
     }
 }
 

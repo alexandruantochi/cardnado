@@ -1,24 +1,22 @@
-import { availableStore, getAvailableStores } from "../../common/cardValidator";
-import { CardDetails } from "../../common/models";
-import { CacheService } from "./lib/cacheService";
+import { availableStore, getAvailableStores } from "../../../common/cardValidator";
+import { CardDetails } from "../../../common/models";
 import { CardnadoApi } from "./lib/repository";
 import { resetInfo, setInfo, shuffle } from "./lib/utils";
 
-declare var JsBarcode;
+declare var JsBarcode: (arg0: string, arg1: string) => void;
 
 class Index {
 
     private cardDataPosition = {};
     private cardData = new Map<availableStore, string[]>();
-    private reportCardButton;
-    private refreshButton;
-    private storeSelector;
-    private cache: CacheService = new CacheService();
+    private reportCardButton: JQuery<HTMLElement>;
+    private refreshButton: JQuery<HTMLElement>;
+    private storeSelector: JQuery<HTMLElement>;
     private api: CardnadoApi = new CardnadoApi();
 
     public async init() {
         setInfo('Please wait...', 'default');
-        const allCards = this.cache.getCards();
+        const allCards = this.api.getCards();
 
         this.reportCardButton = $('#report-card');
         this.refreshButton = $('#refresh-card');
@@ -85,7 +83,6 @@ class Index {
         this.cardDataPosition[this.getCurrentStore()]++;
         const cardListLength = this.cardData.get(this.getCurrentStore()).length;
         if (this.getCurrentCardIndex() >= cardListLength) {
-            // TODO: request next page
             setInfo('You have reached the end of the list. Went back to the first card.', 'warning');
             this.cardDataPosition[this.getCurrentStore()] = 0;
         }

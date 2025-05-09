@@ -1,5 +1,5 @@
 import constants from "./constants";
-import { getRandomInt } from "../../../common/utils";
+import { getRandomInt } from "../../../../common/utils";
 
 type infoType = 'warning' | 'success' | 'default';
 type alertClasses = 'alert alert-warning' | 'alert alert-success' | 'alert';

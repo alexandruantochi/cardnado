@@ -1,7 +1,7 @@
-import { validateStoreAndCard, availableStore } from '../../common/cardValidator';
+import { validateStoreAndCard, availableStore } from '../../../common/cardValidator';
 import { setInfo } from './lib/utils';
 import constants from './lib/constants';
-import { CardDetails } from '../../common/models';
+import { CardDetails } from '../../../common/models';
 
 const checkboxId = '#accept-checkbox';
 const checkboxLabelId = '#checkbox-label';
