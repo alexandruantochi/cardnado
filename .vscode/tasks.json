@@ -1,6 +1,7 @@
 {
 	"version": "2.0.0",
 	"tasks": [
+		// functions
 		{
 			"type": "func",
 			"label": "func: host start",
@@ -49,37 +50,30 @@
 				"cwd": "${workspaceFolder}/api"
 			}
 		},
+		// app
 		{
-			"type": "npm",
-			"label": "webpack: dev server",
-			"script": "start",
-			"promptOnClose": true,
+			"label": "ui dev",
 			"isBackground": true,
+			"type": "npm",
+			"script": "dev",
+			"problemMatcher": {
+				"owner": "vite",
+				"pattern": {
+					"regexp": "^.*$",
+					"file": 1,
+					"location": 2,
+					"message": 3
+				},
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "^.*Vite.*$",
+					"endsPattern": "^.*ready in.*ms.*$"
+				}
+			},
+			"detail": "Runs the 'dev' script from package.json",
 			"options": {
 				"cwd": "${workspaceFolder}/app"
 			},
-			"problemMatcher": {
-				"owner": "webpack",
-				"severity": "error",
-				"fileLocation": "absolute",
-				"pattern": [
-					{
-						"regexp": "ERROR in (.*)",
-						"file": 1
-					},
-					{
-						"regexp": "\\((\\d+),(\\d+)\\):(.*)",
-						"line": 1,
-						"column": 2,
-						"message": 3
-					}
-				],
-				"background": {
-					"activeOnStart": true,
-					"beginsPattern": "Project is running at",
-					"endsPattern": "compiled"
-				}
-			}
 		}
 	]
 }
