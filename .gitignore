@@ -130,7 +130,8 @@ api/dist
 .pnp.*
 
 # html app
-/app/src/dist/*.js
+app/dist
+app/node_modules
 
 # typescript
 *.js.map

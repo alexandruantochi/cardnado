@@ -31,7 +31,8 @@ jobs:
         run: |
           cd ./app
           npm ci
-          npm run production
+          export NODE_ENV=production
+          npm run build
       - name: Test context
         run: pwd && ls -a
       - name: Build And Deploy
@@ -43,7 +44,7 @@ jobs:
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "/app/src/dist" # App source code path
+          app_location: "/app/dist" # App source code path
           output_location: ''
           skip_app_build: true
           ###### End of Repository/Build Configurations ######

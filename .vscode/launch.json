@@ -5,12 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "firefox",
-            "request": "launch",
             "name": "App",
-            "preLaunchTask": "webpack: dev server",
-            "url": "http://localhost:9000",
-            "webRoot": "${workspaceFolder}/app"
+            "type": "firefox", 
+            "request": "launch",
+            "preLaunchTask": "ui dev",
+            "url": "http://localhost:8000", 
+            "webRoot": "${workspaceFolder}/app/src"
         },
         {
             "name": "Api",
