@@ -12,8 +12,10 @@ class CardnadoApi {
 
 
     public async getCards(): Promise<CardDetails[]> {
+        const today = new Date();
+        const cacheBuster = Math.floor(today.getTime() / 86400000);
         try {
-            const response = await fetch(`${constants.getCardsUrl}`, {
+            const response = await fetch(`${constants.getCardsUrl}?cachebuster=${cacheBuster}`, {
                 method: 'GET',
             });
             if (!response.ok) {
