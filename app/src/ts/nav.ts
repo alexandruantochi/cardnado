@@ -1,7 +1,9 @@
+import { getDomElement } from "./lib/utils";
+
 export function initNav() {
-    $(() => {
-        const $navPlaceholder = $('#nav-placeholder');
-        if (!$navPlaceholder.length) return;
+    document.addEventListener('DOMContentLoaded', () => {
+        const navPlaceholder = getDomElement('#nav-placeholder');
+        if (!navPlaceholder) return;
 
         const navHtml = `
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -28,7 +30,7 @@ export function initNav() {
             </nav>
         `;
 
-        $navPlaceholder.html(navHtml);
+         navPlaceholder.innerHTML = navHtml;
     });
 }
 
