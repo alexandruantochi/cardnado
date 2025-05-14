@@ -5,16 +5,17 @@ type infoType = 'warning' | 'success' | 'default';
 type alertClasses = 'alert alert-warning' | 'alert alert-success' | 'alert';
 type requestApiOption = 'getCards' | 'reportCard' | 'addCard';
 
-const alertClassMapping = new Map<infoType, alertClasses>([
-    ['warning', 'alert alert-warning'],
-    ['success', 'alert alert-success'],
-    ['default', 'alert']
+const alertClassMapping = new Map<infoType, string[]>([
+    ['warning', ['alert', 'alert-warning']],
+    ['success', ['alert', 'alert-success']],
+    ['default', ['alert']]
 ]);
 
 function setInfo(text: string, infoType: infoType): void {
-    const info = $(constants.infoSection);
-    info.text(text);
-    info.removeClass().addClass(alertClassMapping.get(infoType));
+    const info = getDomElement(constants.infoSection) as HTMLDivElement;
+    info.textContent = text;
+    info.className = '';
+    info.classList.add(...alertClassMapping.get(infoType));
 }
 
 function resetInfo() {
@@ -36,5 +37,9 @@ function shuffle(cardNumbers: string[]): void {
     }
 }
 
+function getDomElement(selector: string) : Element | null {
+  return document.querySelector(selector);
+}
 
-export { setInfo, resetInfo, shuffle, requestApiOption }
+
+export { setInfo, resetInfo, shuffle, getDomElement, requestApiOption }

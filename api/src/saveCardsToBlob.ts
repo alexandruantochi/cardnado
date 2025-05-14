@@ -50,5 +50,5 @@ export async function saveCardsToBlob(myTimer: any, context: InvocationContext):
 app.timer('saveCardsToBlob', {
     schedule: '0 0 0 * * *',
     handler: saveCardsToBlob,
-    runOnStartup: true
+    runOnStartup: false
 }); 

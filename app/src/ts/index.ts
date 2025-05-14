@@ -1,7 +1,7 @@
 import { availableStore, getAvailableStores } from "../../../common/cardValidator";
 import { CardDetails } from "../../../common/models";
 import { CardnadoApi } from "./lib/repository";
-import { resetInfo, setInfo, shuffle } from "./lib/utils";
+import { getDomElement, resetInfo, setInfo, shuffle } from "./lib/utils";
 
 declare var JsBarcode: (arg0: string, arg1: string) => void;
 
@@ -9,18 +9,18 @@ class Index {
 
     private cardDataPosition = {};
     private cardData = new Map<availableStore, string[]>();
-    private reportCardButton: JQuery<HTMLElement>;
-    private refreshButton: JQuery<HTMLElement>;
-    private storeSelector: JQuery<HTMLElement>;
+    private reportCardButton: HTMLButtonElement;
+    private refreshButton: HTMLButtonElement;
+    private storeSelector: HTMLSelectElement;
     private api: CardnadoApi = new CardnadoApi();
 
     public async init() {
         setInfo('Please wait...', 'default');
         const allCards = this.api.getCards();
 
-        this.reportCardButton = $('#report-card');
-        this.refreshButton = $('#refresh-card');
-        this.storeSelector = $('#store-selector');
+        this.reportCardButton = getDomElement('#report-card') as HTMLButtonElement;
+        this.refreshButton = getDomElement('#refresh-card') as HTMLButtonElement;
+        this.storeSelector = getDomElement('#store-selector') as HTMLSelectElement;
 
 
         getAvailableStores().forEach(x => {
@@ -28,9 +28,9 @@ class Index {
             this.cardData.set(x, []);
         });
 
-        this.storeSelector.on('change', () => this.generateBarcode());
-        this.refreshButton.on('click', () => this.nextCard());
-        this.reportCardButton.on('click', () => this.reportCard());
+        this.storeSelector.addEventListener('change', () => this.generateBarcode());
+        this.refreshButton.addEventListener('click', () => this.nextCard(false));
+        this.reportCardButton.addEventListener('click', () => this.reportCard());
 
         (await allCards).forEach(x => {
             this.cardData.get(x.store).push(x.cardNumber);
@@ -43,7 +43,7 @@ class Index {
     }
 
     private getCurrentStore(): availableStore {
-        return this.storeSelector.val() as availableStore;
+        return this.storeSelector.value as availableStore;
     }
 
     private getCurrentCardIndex(): number {
@@ -66,7 +66,7 @@ class Index {
         try {
             await this.api.reportCard(cardDetails);
             setInfo(`Reported, new card generated.`, 'success');
-            this.nextCard();
+            this.nextCard(true);
         } catch (Err) {
             console.log(Err.message);
         } finally {
@@ -76,32 +76,39 @@ class Index {
 
     private generateBarcode(): void {
         JsBarcode("#barcode", this.getCurrentCard());
-        $('#barcode').attr('width', '100%');
+        var barcode = getDomElement('#barcode') as SVGSVGElement;
+        barcode.setAttribute('width', '100%');
     }
 
-    private nextCard() {
+    private nextCard(keepInfo: boolean) {
         this.cardDataPosition[this.getCurrentStore()]++;
         const cardListLength = this.cardData.get(this.getCurrentStore()).length;
+
+        if (!keepInfo) {
+            resetInfo();
+        }
+
         if (this.getCurrentCardIndex() >= cardListLength) {
             setInfo('You have reached the end of the list. Went back to the first card.', 'warning');
             this.cardDataPosition[this.getCurrentStore()] = 0;
         }
+
         this.generateBarcode();
     }
 
-    private disableButtons() {
-        [this.reportCardButton, this.refreshButton].forEach(x => x.addClass('disabled'));
+    private disableButtons(): void {
+        [this.reportCardButton, this.refreshButton].forEach(button => {
+            button.classList.add('disabled');
+        });
     }
 
-    private enableButtons() {
-        [this.reportCardButton, this.refreshButton].forEach(x => x.removeClass('disabled'));
+    private enableButtons(): void {
+        [this.reportCardButton, this.refreshButton].forEach(button => {
+            button.classList.remove('disabled');
+        });
     }
 }
 
-$(function () {
+document.addEventListener('DOMContentLoaded', () => {
     new Index().init();
 });
-
-
-
-
