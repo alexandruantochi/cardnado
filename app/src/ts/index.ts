@@ -1,5 +1,5 @@
 import { availableStore, getAvailableStores } from "../../../common/cardValidator";
-import { CardDetails } from "../../../common/models";
+import { AllCardsData, CardDetails } from "../../../common/models";
 import { CardnadoApi } from "./lib/repository";
 import { getDomElement, resetInfo, setInfo, shuffle } from "./lib/utils";
 
@@ -8,7 +8,7 @@ declare var JsBarcode: (arg0: string, arg1: string) => void;
 class Index {
 
     private cardDataPosition = {};
-    private cardData = new Map<availableStore, string[]>();
+    private cardData : AllCardsData;
     private reportCardButton: HTMLButtonElement;
     private refreshButton: HTMLButtonElement;
     private storeSelector: HTMLSelectElement;
@@ -22,21 +22,16 @@ class Index {
         this.refreshButton = getDomElement('#refresh-card') as HTMLButtonElement;
         this.storeSelector = getDomElement('#store-selector') as HTMLSelectElement;
 
-
-        getAvailableStores().forEach(x => {
-            this.cardDataPosition[x] = 0;
-            this.cardData.set(x, []);
-        });
-
         this.storeSelector.addEventListener('change', () => this.generateBarcode());
         this.refreshButton.addEventListener('click', () => this.nextCard(false));
         this.reportCardButton.addEventListener('click', () => this.reportCard());
 
-        (await allCards).forEach(x => {
-            this.cardData.get(x.store).push(x.cardNumber);
-        });
 
-        this.cardData.forEach(cardNumbers => shuffle(cardNumbers));
+        this.cardData = await allCards;
+        getAvailableStores().forEach(x => {
+            this.cardDataPosition[x] = 0;
+            shuffle(this.cardData[x]);
+        });
 
         resetInfo();
         this.generateBarcode();
@@ -51,7 +46,7 @@ class Index {
     }
 
     private getCurrentCard(): string {
-        return this.cardData.get(this.getCurrentStore())[this.getCurrentCardIndex()];
+        return this.cardData[this.getCurrentStore()][this.getCurrentCardIndex()];
     }
 
     private async reportCard() {
@@ -82,7 +77,7 @@ class Index {
 
     private nextCard(keepInfo: boolean) {
         this.cardDataPosition[this.getCurrentStore()]++;
-        const cardListLength = this.cardData.get(this.getCurrentStore()).length;
+        const cardListLength = this.cardData[this.getCurrentStore()].length;
 
         if (!keepInfo) {
             resetInfo();

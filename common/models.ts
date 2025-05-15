@@ -14,4 +14,8 @@ type ApiReply = {
     status: number
 }
 
-export { CardDetails, ApiReply };
+type AllCardsData = {
+    [k in availableStore]: string[];
+}
+
+export { CardDetails, ApiReply, AllCardsData };
