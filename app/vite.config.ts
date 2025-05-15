@@ -14,7 +14,7 @@ export default defineConfig({
         index: path.resolve(__dirname, 'src/index.html'),
         add_card: path.resolve(__dirname, 'src/add-card.html'),
         contact: path.resolve(__dirname, 'src/support.html'),
-        news: path.resolve(__dirname, 'src/news.html'),
+        contact: path.resolve(__dirname, 'src/contact.html'),
       }
     }
   },
