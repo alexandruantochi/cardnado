@@ -1,4 +1,4 @@
-import { CardDetails } from "../../../../common/models";
+import { AllCardsData, CardDetails } from "../../../../common/models";
 import constants from "./constants";
 import { requestApiOption } from './utils';
 
@@ -11,7 +11,7 @@ class CardnadoApi {
     ]);
 
 
-    public async getCards(): Promise<CardDetails[]> {
+    public async getCards(): Promise<AllCardsData> {
         const today = new Date();
         const cacheBuster = Math.floor(today.getTime() / 86400000);
         try {
